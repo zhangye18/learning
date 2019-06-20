@@ -1,0 +1,64 @@
+DispatcherServlet
+Controller
+HandlerAdapter
+HandlerInterceptor Interface
+method: preHandle
+        postHandle
+		afterCompletion
+HandlerMapping
+	1.Help DispatcherServlet to get the right controller.
+	2.Wrap controller with HandlerInterceptor
+HandlerExecutionChain
+
+                        Excution Chain
+preHandle-->Controller method -->postHandle-->afterCompletion
+ModelAndView Model Map
+ViewResolver
+	Help DispatcherServlet to Resolve the right View to render page.
+View
+	Responsible for page rendering
+Maven
+	
+POM 
+	Project Object Model
+	an xml file (pom.xml)
+	Contains information dependencies,developers,organization,licenses...
+
+Dependency
+	/WEB-INF/lib
+
+Coordinates
+	groupId
+	artifactId
+	version
+	packaging (没有则是JAR)
+上述四项唯一确定一个产品
+
+Maven 安装
+	下载并解压Maven
+	配置环境变量(M2_HOME,Path)
+		M2_HOME:Maven解压路径
+		Path:%M2_HOME%\bin
+	测试下Maven是否安装成功
+	cmd 
+	输入 mvn -version
+	显示Maven安装信息
+	配置Maven配置文件(本地仓库路径，镜像)
+https://maven.apache.org
+
+创建springMvc项目
+mvn archetype:generate -DgroupId=spring-mvc -DartifactId=spring-mvc-study -DarchetypeArtifactId=maven-archetype-webapp
+
+
+idea 创建mvc项目参考地址https://blog.csdn.net/CQUWEL/article/details/59495083
+
+mvn jetty:run
+Ctrl+C 停掉
+cls 清理屏幕
+
+JSON JavaScript Object Notation
+ContentNegotiatingViewResvolver
+ResponseEntity
+ResponseBody\RequestBody
+
+
