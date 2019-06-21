@@ -18,3 +18,7 @@ linux 安装git
 
 6.查看SSH KEY
 cd /root/.ssh	
+
+linux 安装中文输入法
+yum install "@Chinese Support"
+
