@@ -1,0 +1,18 @@
+在pip的python官网上我们可以看到，pip 是“A tool for installing and managing Python packages.”，
+也就是说pip是python的软件安装工具，下面是pip的使用方法：
+安装包：   
+pip install SomePackage
+查看安装包时安装了哪些文件：
+ pip show --files SomePackage
+查看哪些包有更新：
+ pip show --files SomePackage
+更新一个软件：
+pip install --upgrade SomePackage
+卸载软件：
+ pip uninstall SomePackage
+所以，有了pip我们就可以自动的安装其他软件包，比如我们需要的 nose、virtualenv、distribute。
+
+安装好pip之后，我们就可以直接使用pip安装其他软件包了：
+ sudo pip install nose
+ sudo pip install virtualenv
+ sudo pip install distribute
