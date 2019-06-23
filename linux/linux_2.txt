@@ -1,0 +1,381 @@
+vim + filename 
+#打开文件，光标定位在最后一行
+
+vim +3 filename
+#打开文件，光标定位在第3行
+
+vim +/imooc abc
+#打开文件，光标定位在第一次出现imooc的行上，按n可以上下跳跃到出现该字符的那一行
+
+vim aa bb cc
+#可以打开多个文件 :n可以切换到下一个文件 :N 或:prev 可以切换到上一个文件
+
+底行模式常用指令
+:w
+#将文件的修改从内存写入硬盘中，即保存修改
+
+:q
+#退出当前vim编辑
+
+:!
+#强制执行
+
+:ls
+#列出打开的所有文件
+
+:n 
+#切换到后一个文件
+
+:N
+#切换到上一个文件
+
+:15
+#把光标快速定位到15行
+
+:/xxx
+#从光标位开始，向后搜索xxx字符串，第一找到定位在这里
+
+:?xxx
+#从光标位开始，向前搜索xxx字符串，第一找到定位在这里
+
+命令模式常用指令
+h 光标左移
+j 光标下移
+k 光标上移
+l 光标右移
+ctrl +f  向下翻页(front)
+ctrl +b  向上翻页(back)
+ctrl +d  向下翻半页(down)
+ctrl +u   向上翻半页(up)
+dd 删除光标所在行
+o 在光标所在行的下方插入一行并切换到输入模式
+yy 复制光标所在行
+p 在光标所在行的下方粘贴
+P 在光标所在行的上方粘贴
+
+磁盘管理
+df 
+#查看磁盘分区使用状况
+-l 仅显示本地磁盘(默认)
+-a 显示所有文件系统的磁盘使用情况，包含比如/proc/
+-h 以1024进制计算最适合的单位显示磁盘容量
+-H 以1000进制计算最适合的单位显示磁盘容量
+-T 显示磁盘分区类型
+-t 显示指定类型文件系统的磁盘分区
+-x 不显示指定类型文件系统的磁盘分区
+
+du
+#统计磁盘上的文件大小
+-b 以byte为单位统计文件
+-k 以KB为单位统计文件
+-m 以MB为单位统计文件
+-h 按照1024进制以最适合的单位统计文件
+-H 按照1000进制以最适合的单位统计文件
+-s 指定统计目标
+
+主分区和扩展分区总数不能超过4个
+扩展分区最多只能有一个
+扩展分区不能直接存取数据
+
+Linux系统中硬件设备都是以文件的形式存在于根目录下的dev目录下
+硬件设备都是由Linux系统自动识别的，但是不能立即使用，必须对硬盘进行分区、格式化、挂载后才能使用。
+
+fdisk -l
+#查看硬盘
+
+fdisk /dev/sdb
+#sdb进入分区模式
+
+m
+#查看命令帮助信息
+
+n
+#添加一个新的分区
+
+Start是扇区数据块的编号
+注意输入新分区的扇区终止位置可以按提供的写，也可以直观的写入+3000M(即分配大约3G)
+
+p
+#查看已经分区的信息
+
+d
+#删除分区
+
+w
+#磁盘分区已写入
+
+分区模式之MBR
+ -主分区不超过4个
+ -单个分区容量最大2TB
+ -fdisk分区工具只能做MBR分区模式
+ 
+分区模式之GPT
+ -主分区个数"几乎"没有限制
+ -单个分区容量"几乎"没有限制
+
+在GPT的分区表中最多可支持128个主分区
+在GPT的分区模式中，每个分区的大小突破了MBR分区的2TB限制
+1EB=1024PB,
+1PB=1024TB,
+1TB=1024GB,
+18EB=18432PB=18874368TB=19327352832GB 
+GPT的主分区中，不适合安装x86架构的系统
+
+parted
+#启用parted分区工具
+
+help
+#查看分区帮助信息
+
+select /dev/sdc
+#进入要分区的硬盘
+
+mklable msdos/gpt
+#给目标硬盘指定分区表的类型 
+#MBR分区模式(msdos)
+#GPT分区模式(gpt)
+
+print
+#查看硬盘当前分区详情
+
+print all 
+#查看系统的硬盘的所有分区详情
+
+parted工具分区模式有两种交互模式和命令模式
+交互模式如下:
+mkpart
+#添加一个新的分区
+
+注意 Start在fdisk中是扇区数据块的编号,而parted中指的是从第几MB开始
+
+命令模式添加分区
+mkpart test 2000-3000
+#分区 名字test ,Start 2000MB,End 3000MB
+#命令分区模式，分区的名字不可省略
+
+rm 分区编号
+#删除分区
+
+unit GB
+#Start 与End 以GB为单位分区
+
+quit
+#退出分区，保存分区信息
+
+分区格式化工具(mkfs)
+
+ls -l /dev/sdb*
+#查看分区的设备文件信息
+
+mkfs.ext3 /dev/sdb1
+#格式化sdb1为ext3系统类型
+
+mkfs -t ext4 /dev/sdb2
+#格式化sdb2为ext4系统类型
+
+MBR分区模式,只有主分区和逻辑分区可以格式化，扩展分区不可以。
+
+挂载分区
+分区默认的挂载目录是/mnt目录
+挂载点必须已经存在
+
+mkdir -p /mnt/imooc
+#新建挂载点
+
+mount /dev/sdb1 /mnt/imooc
+#把/dev/sdb1挂载到/mnt/imooc下
+
+unmount /mnt/imooc
+#挂载的磁盘分区卸掉
+
+在/etc/fstab 中添加
+设备名称 挂载点 文件系统类型 defaults 0 0 
+这样，系统重启，分区也会自动挂载
+
+
+如何为硬盘添加swap交换分区
+1.建立一个普通的Linux分区
+2.修改分区类型的16进制编码
+3.格式化交换分区
+4.启用交换分区
+
+
+fdisk /dev/sdb
+#sdb进入分区模式
+
+p
+#查看已经分区的信息
+
+t
+#选择分区编号
+
+L
+#查看编码列表
+
+输入分区的编码 82(swap)
+
+w
+#磁盘分区已写入
+
+mkswap /dev/sdb6
+#格式化交换分区
+
+swapon /dev/sdb6
+#启用交换分区
+
+free
+#查看swap的加载信息
+
+swapoff /dev/sdb6
+#停掉交换分区
+
+用户：使用操作系统的人
+用户组：具有相同系统权限的一组用户
+
+/etc/group 存储当前系统中所有用户组信息
+-Group :     x         :   123   :abc,def,xyz
+-组名称：组密码占位符  : 组编号  : 组中用户名列表
+
+/etc/gshadow 存储当前系统中用户组的密码信息
+-Group :     *   :            :abc,def,xyz
+-组名称：组密码  : 组管理者   : 组中用户名列表
+注意 组密码为空或者为*或者！，都可以认为组密码为空
+
+
+/etc/passwd 存储当前系统中所有用户的信息
+-user  :     x    :   123  :    456   :  xxxxxxxx  :/home/user  : /bin/bash
+-用户名:密码占位符:用户编号:用户组编号:用户注释信息:用户主目录  :shell类型
+
+/etc/shadow 存储当前系统中所有用户的密码信息
+-user   :vf;/zu8s....:::::
+-用户名 :密码        :::::
+
+groupadd 组名称
+#创建组
+
+groupmod -n market sexy
+#修改组名称 sexy 改成 market
+
+groupmod -g 668 market
+#修改market组的编号改为 668
+
+groupadd -g 888 boss
+#新建组，编号 888，组名称为boss
+
+groupdel market
+#删除用户组market
+
+useradd -g market sdf
+#创建market组的用户sdf
+
+useradd -d /home/xxx imooc
+#创建用户imooc,指定用户的个人文件夹为/home/xxx
+
+usermod -c dgdzmx sdf
+#修改用户sdf的注释信息
+
+usermod -l cls sdf
+#修改sdf的用户名为cls
+
+usermod -d /home/cls cls
+#修改cls用户的个人文件夹/home/cls
+
+usermod -g market imooc
+#修改imooc 用户组为market
+
+userdel jzmb
+#删除用户jzmb
+
+userdel -r jzmb
+#删除用户jzmb,包括jzmb的个人文件夹
+
+touch /etc/nologin
+#禁止除了root以外的账户登录
+
+passwd -l cls
+#锁定cls账户
+
+passwd -u cls
+#解锁cls账户
+
+passwd -d cls
+#cls账户无密码登录
+
+主要组与附属组
+用户可以同时属于多个组
+- 一个主要组
+- 多个附属组
+
+gpasswd -a cls boss
+#给cls用户添加附属组boss组
+#添加多个附属组，以 "," 分割
+
+newgrp boss
+#用户自己切换到附属组boss
+
+gpasswd -d cls boss
+#删除cls用户的附属组boss
+
+useradd -g froup1 -G group2,group3.... 
+#创建用户的同时指定主组以及多个附属组
+
+
+gpasswd imooc
+#设置imooc组的密码
+
+su username
+#切换到username
+#不加参数，即切换到root上
+
+其他命令
+whoami
+#显示当前登录用户名
+
+id imooc
+#显示指定用户信息，包括用户编号、用户名
+#主要组编号及名称，附属组列表
+
+groups imooc
+#显示imooc用户所在的所有组
+
+chfn imooc
+#设置用户资料，依次输入用户资料
+
+finger imooc
+#显示用户详细资料
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
