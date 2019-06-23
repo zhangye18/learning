@@ -1,0 +1,17 @@
+
+
+
+https://www.cnblogs.com/shizhongyang/p/8464876.html
+
+安装时报error while loading shared libraries: libnuma.so.1: cannot open shared object file
+原因：
+
+yum 安装的libnuma.so.1，但安装时默认安装的是32的，但db2需要的是64位的
+1
+解决办法：
+
+1.如果已经安装了libnuma.so.1，先yum remove libnuma.so.1
+2.yum -y install numactl.x86_64
+
+
+7+K;oPy3lEe4
